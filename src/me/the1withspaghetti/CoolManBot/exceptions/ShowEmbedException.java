@@ -4,8 +4,6 @@ import java.awt.Color;
 import java.time.Instant;
 import java.util.LinkedHashMap;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
-
 import me.the1withspaghetti.CoolManBot.Main;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
@@ -69,7 +67,7 @@ public class ShowEmbedException extends Exception {
 			emb.addField(name, desc, true);
 		});
 		
-		emb.setDescription("`"+ExceptionUtils.getStackTrace(this)+"`");
+		emb.setDescription("`"+this.getStackTrace()[0].toString()+"`");
 		
 		emb.setTimestamp(Instant.now());
 		emb.setColor(Color.RED);

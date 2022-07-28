@@ -36,25 +36,25 @@ public class ColorAdmin extends CommandDataImpl implements ISlashCommand {
 		
 		if (event.getSubcommandName().equals("setup")) {
 			
-			event.deferReply(true);
+			event.deferReply(true).queue();;
 			
 			for (int i = 0; i < ColorCommand.COLORS.length; i++) {
 				if (event.getGuild().getRolesByName(ColorCommand.COLORS[i], true).isEmpty()) {
 					event.getGuild().createRole().setPermissions((long) 0).setColor(ColorCommand.VALUES[i]).setName(ColorCommand.COLORS[i]).queue((r) -> {
 						if (r.getName().equals(ColorCommand.COLORS[ColorCommand.COLORS.length - 1]))
-							event.reply(CoolEmoji.CHECK+" Done, I recommend you make all other roles colorless so that these roles have color priority!").setEphemeral(true).queue();
+							event.getHook().sendMessage(CoolEmoji.CHECK+" Done, I recommend you make all other roles colorless so that these roles have color priority!").setEphemeral(true).queue();
 					});
 				}
 			}
 			
 		} else if (event.getSubcommandName().equals("uninstall")) {
 
-			event.deferReply(true);
+			event.deferReply(true).queue();
 			
 			for (int i = 0; i < ColorCommand.COLORS.length; i++) {
 				event.getGuild().getRolesByName(ColorCommand.COLORS[i], true).forEach((role) -> role.delete().queue((res) -> {
 					if (role.getName().equals(ColorCommand.COLORS[ColorCommand.COLORS.length - 1]))
-						event.reply(CoolEmoji.CHECK+" Successfully removed all color roles").setEphemeral(true).queue();
+						event.getHook().sendMessage(CoolEmoji.CHECK+" Successfully removed all color roles").setEphemeral(true).queue();
 				}));
 			}
 			

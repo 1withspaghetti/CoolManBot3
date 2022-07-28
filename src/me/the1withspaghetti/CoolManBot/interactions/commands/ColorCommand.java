@@ -17,7 +17,6 @@ import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInterac
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent;
-import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
 import net.dv8tion.jda.api.interactions.components.selections.SelectMenu.Builder;
@@ -31,7 +30,6 @@ public class ColorCommand extends CommandDataImpl implements ISlashCommand, ICom
 	
 	public ColorCommand() {
 		super("colorrole", "Use to assign yourself with a custom role color");
-		this.addOption(OptionType.STRING, "Color", "The color for your role, or leave blank to remove any colors", false, true);
 	}
 	
 	public String getId() {
@@ -54,16 +52,21 @@ public class ColorCommand extends CommandDataImpl implements ISlashCommand, ICom
 		EmbedBuilder emb = new EmbedBuilder();
 		emb.setColor(Main.COLOR);
 		emb.setTitle("Pick Your Role Color!");
-		emb.setDescription("Choose from the options below");
-		// Builds select menu
-		Builder b = SelectMenu.create("color:select").setPlaceholder("Select Color...");
-		for (int i = 0; i < COLORS.length; i++) {
+		emb.setDescription("Choose from any of the options below");
+		// Builds select menus
+		Builder b1 = SelectMenu.create("color:1select").setPlaceholder("Select Color...");
+		for (int i = 0; i < COLORS.length/2; i++) {
 			if (event.getGuild().getRolesByName(COLORS[i], true).size() > 0)
-				b.addOption(COLORS[i], COLORS[i], Emoji.fromFormatted(EMOJI[i]));
+				b1.addOption(COLORS[i], COLORS[i], Emoji.fromFormatted(EMOJI[i]));
+		}
+		Builder b2 = SelectMenu.create("color:2select").setPlaceholder("Select Color...");
+		for (int i = COLORS.length/2; i < COLORS.length; i++) {
+			if (event.getGuild().getRolesByName(COLORS[i], true).size() > 0)
+				b2.addOption(COLORS[i], COLORS[i], Emoji.fromFormatted(EMOJI[i]));
 		}
 		Button remove = Button.danger("color:remove", "Remove Role Color");
 		
-		event.replyEmbeds(emb.build()).addActionRow(b.build()).addActionRow(remove).setEphemeral(true).queue();
+		event.replyEmbeds(emb.build()).addActionRow(b1.build()).addActionRow(b2.build()).addActionRow(remove).queue();
 	}
 
 	@Override
