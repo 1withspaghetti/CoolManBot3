@@ -54,6 +54,7 @@ public class ShowEmbedException extends Exception {
 	public void postEmbed() {
 		EmbedBuilder emb = getEmbed();
 		Main.jda.getGuildById("833881082926596127").getTextChannelById("1001354822185910332").sendMessageEmbeds(emb.build()).queue();
+		this.printStackTrace();
 	}
 	
 	public EmbedBuilder getEmbed() {
