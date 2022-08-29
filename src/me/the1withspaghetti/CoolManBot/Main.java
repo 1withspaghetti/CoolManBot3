@@ -15,6 +15,7 @@ import me.the1withspaghetti.CoolManBot.util.DataBase;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
 
 public class Main {
@@ -25,13 +26,16 @@ public class Main {
 
 	public static void main(String[] args) throws Exception {
 		
-		jda = JDABuilder.createDefault("ODMzMDg1MjcwNTMzNDcyMzU2.YHtNHg.kijpi0jHoIrVMTExA98Jrg5sMZY").build();
-		//jda = JDABuilder.createDefault("ODkzMzExMzIxMjQyNzUxMDE3.Gn27w-.MC6eQGh8H8QqGhMYFTmLH2PrEZ8gal_IAv96YE").build();
+		if (args.length != 1) {
+			System.err.println("Usage: java -jar CoolManBot.jar BOT_TOKEN");
+			System.exit(1);
+		}
 		
-		DataBase.connect(System.getProperty("user.dir")+File.separator+"cool_man.db");
-		
+		jda = JDABuilder.createDefault(args[0]).enableIntents(GatewayIntent.MESSAGE_CONTENT).build();
 		jda.getPresence().setActivity(Activity.of(Activity.ActivityType.STREAMING, "Cool Man Game", "https://www.youtube.com/watch?v=tPEE9ZwTmy0"));
 		jda.awaitReady();
+		
+		DataBase.connect(System.getProperty("user.dir")+File.separator+"cool_man.db");
 		
 		ISlashCommand[] commands = {
 				new AvatarCommand(),
